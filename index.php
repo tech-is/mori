@@ -1,5 +1,4 @@
 <?php
-//test
 require_once("./core/core.php");
 $array = [["name","名前"],["kana","カナ"],["tel","電話"],["mail","mail"]];
 //送信ボタンが押されたら
