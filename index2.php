@@ -30,24 +30,11 @@ if(isset($_POST["submit"])) {
 </head>
 <body>
 <?php
-// $pdo = new PDO("mysql: host=127.0.0.1;dbname=teckis;", "root", "");
-
-// if(isset($_POST["submit"])) {
-//   foreach($array as $value){
-//       $sql = "INSERT INTO MEMBER ($value[0]) VALUES (:$value[1])";
-//       $stmt = $pdo->prepare($sql);
-//       $stmt -> bindValue(":name", $_POST["name"], PDO::PARAM_STR);
-//       $stmt -> execute();
-//       }
-//       header("Location: http://localhost/index3.php");
-//       exit;  
-//  }
-//除染
 Clean();
 // 二重読み込み防止
 session_start();
 $_SESSION['home'] = 1;
-?>        
+?>
 <p>会員登録フォーム</p>
 <p>名前　　　<?= $_POST['name'] ?></p>
 <p>カナ　　　<?= $_POST['kana'] ?></p>
