@@ -2,6 +2,15 @@
 require_once("./core/core.php");
 $array = [["name","名前"],["kana","カナ"],["tel","電話"],["mail","mail"]];
 
+	// ファイルのアップロード
+  if(!empty($_FILES)) {
+      $fileName = $_FILES['image']['name'];
+      if($fileName != "" ){
+          $image = $fileName;
+          move_uploaded_file($_FILES['image']['tmp_name'],'./temp/',$image);
+    }
+  }
+
 //送信ボタンが押されたら
 $error=array();
   if(!empty($_POST['confirm'])){
@@ -19,7 +28,7 @@ $error=array();
     if(mb_strlen($_POST["kana"])>20){
       $error[] = "「カナ」20文字以内で入力してください<br>";
     }
-    // 電話 
+    // 電話
     if($_POST["tel"]===""||!preg_match('/[0-9]/',$_POST["tel"])){
       $error[] = "「電話」半角数字で入力してください<br>";
     }
@@ -39,7 +48,17 @@ $error=array();
   $page_flag = 1; //確認画面
 
   } elseif (!empty($_POST['submit'])) {
-
+      // $sql = "INSERT INTO MEMBER (NAME, TEL) VALUES (:name, :tel)";
+      $sql = "INSERT INTO MEMBER (NAME, TEL, MAIL, YEAR, SEX, MAGAZINE) VALUES (:name, :tel, :mail, :year, :sex, :magazine)";
+      $stmt = $pdo->prepare($sql);
+      $stmt -> bindValue(":name", $_POST["name"], PDO::PARAM_STR);
+      $stmt -> bindValue(":tel", $_POST["tel"], PDO::PARAM_STR);
+      $stmt -> bindValue(":mail", $_POST["mail"], PDO::PARAM_STR);
+      $stmt -> bindValue(":year", $_POST["year"], PDO::PARAM_INT);
+      $stmt -> bindValue(":sex", $_POST["sex"], PDO::PARAM_STR);
+      $stmt -> bindValue(":magazine", $_POST["magazine"], PDO::PARAM_INT);
+      $stmt -> execute();
+  
   $page_flag = 2; //完了画面
 
   } else {
@@ -57,8 +76,13 @@ $error=array();
     body{
         padding : 50px;
     }
+
+    .error{
+        color : red;
+    }
 </style>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" 
+  　　　 href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
@@ -67,7 +91,7 @@ $error=array();
   <div class="container">
     <h1>会員登録フォーム</h1>
     <br>
-
+    <div class="error">
     <?php
     //エラー内容をここで出力する
     if(count($error)>0){
@@ -76,9 +100,11 @@ $error=array();
       }
     }
     ?>
+    </div>
     <br>
 
     <?php if ($page_flag === 1) : ?>
+    <!-- 確認ページ -->
     <?php
     Clean();
     // 二重読み込み防止
@@ -86,17 +112,17 @@ $error=array();
       $_SESSION['home'] = 1;
       ?>
       <form action="" method="post">        
-      <p>名前
+      <p>名前:
       <?= $_POST['name'] ?></p>
-      <p>カナ
+      <p>カナ:
       <?= $_POST['kana'] ?></p>
-      <p>電話
+      <p>電話:
       <?= $_POST['tel'] ?></p>
-      <p>mail
+      <p>mail:
       <?= $_POST['mail'] ?></p>
-      <p>生まれ年
+      <p>生まれ年:
       <?= $_POST['year'] ?>年</p>
-      <p>性別
+      <p>性別:
       <?php
         if($_POST['sex'] === "male"){
           echo "男性";
@@ -105,22 +131,26 @@ $error=array();
         }
         ?>
       </p>
-      <p>メールマガジン
+      <p>メールマガジン:
       <?=isset($_POST['magazine'])? '送付する': '' ?></p>
       
       <form action="" method="post">
-      <input type="button" onclick="history.back();" value="戻る">
-      <input class="btn btn-primary col-sm-5 pull-right" type="submit" name="submit" value="送信">
-        <input type="hidden" name="year" value="<?= $_POST['year'] ?>">
-        <input type="hidden" name="sex" value="<?= $_POST['sex'] ?>">
-        <input type="hidden" name="magazine" value="<?= $_POST['magazine'] ?>">   
+        <input type="button" onclick="history.back();" value="戻る">
+        <input class="btn btn-primary col-sm-5 pull-right" type="submit" name="submit" value="送信">
+        <input type="hidden" name="name" value="<?= $_POST["name"] ?>">
+        <input type="hidden" name="tel" value="<?= $_POST["tel"] ?>">
+        <input type="hidden" name="mail" value="<?= $_POST["mail"] ?>">
+        <input type="hidden" name="year" value="<?= $_POST["year"] ?>">
+        <input type="hidden" name="sex" value="<?= $_POST["sex"] ?>">
+        <input type="hidden" name="magazine" value="<?= $_POST['magazine'] ?>">
     
     <?php elseif ($page_flag === 2) : ?>
     <p>送信完了しました！</p>
     <input class="btn btn-primary col-sm-4 col-sm-offset-4" type="button" onClick="location.href='index.php'" value="ホームへ">
   
    　<?php else : ?>
-   　<form action="" method="post">
+     <!-- 入力ページ -->
+   　<form action="" method="post" enctype="multipart/form-data">
      <?php
       insert_parts($array);
      ?>
@@ -144,12 +174,20 @@ $error=array();
     <br>
     <div class ="form-group">
         <label for="magazine">メールマガジン送付</label>
-        <input type="checkbox" checked name="magazine" value="送付する" id="magazine"><br>
+        <input type="checkbox" checked name="magazine" value='1' id="magazine"><br>
     </div>
+  <br>
+  <div class ="form-group">
+  <label for="image">免許証</label><br>
+  <img src="<?php if(!empty($_FILES)){ echo './temp/' .$image['image']; }?>">
+  <br>
+  <input type="file" name="image">
   <br>
     <div class ="form-group">
         <input type="submit" name="confirm" value="登録">
     </div>
+ 
+	</div>
   </form>
   <?php endif; ?>
   </div>
