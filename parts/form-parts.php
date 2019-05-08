@@ -5,7 +5,6 @@
         id="<?php echo $val[0]; ?>"
         value="<?php 
         if(isset($_POST[$val[0]])){
-            echo $_POST[$val[0]];
-        } 
+            echo $_POST[$val[0]];} 
         ?>">
 </div>

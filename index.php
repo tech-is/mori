@@ -10,10 +10,9 @@ $array = [["name","名前"],["kana","カナ"],["tel","電話"],["mail","mail"]];
           move_uploaded_file($_FILES['image']['tmp_name'],'./temp/',$image);
     }
   }
-
 //送信ボタンが押されたら
 $error=array();
-  if(!empty($_POST['confirm'])){
+if(!empty($_POST['confirm'])){
     // 名前
     if($_POST['name']===""){
       $error[] = "「名前」名前を入力してください<br>";
@@ -39,17 +38,24 @@ $error=array();
     if(mb_strlen($_POST["mail"])>32){
       $error[] = "「mail」メールアドレスが長すぎます<br>";
     }
+    //パスワード
+    if($_POST["pass"]==="" || $_POST["pass1"]===""){
+      $error[] = "「パスワード」パスワードが入力されていません<br>";
+    }
 }
 
   $page_flag = 0; //入力画面
-
+  session_start();
   if (!empty($_POST['confirm']) && count($error) === 0){
 
   $page_flag = 1; //確認画面
 
   } elseif (!empty($_POST['submit'])) {
-      // $sql = "INSERT INTO MEMBER (NAME, TEL) VALUES (:name, :tel)";
-      $sql = "INSERT INTO MEMBER (NAME, TEL, MAIL, YEAR, SEX, MAGAZINE) VALUES (:name, :tel, :mail, :year, :sex, :magazine)";
+      $hash = Pass_Hash();
+      // echo $_POST['token'];
+      // echo $_SESSION['key'];
+      if(isset($_POST['token']) && $_POST['token']===$_SESSION['key']){
+      $sql = "INSERT INTO MEMBER (NAME, TEL, MAIL, YEAR, SEX, MAGAZINE, PASSWORD) VALUES (:name, :tel, :mail, :year, :sex, :magazine, :pass)";
       $stmt = $pdo->prepare($sql);
       $stmt -> bindValue(":name", $_POST["name"], PDO::PARAM_STR);
       $stmt -> bindValue(":tel", $_POST["tel"], PDO::PARAM_STR);
@@ -57,8 +63,21 @@ $error=array();
       $stmt -> bindValue(":year", $_POST["year"], PDO::PARAM_INT);
       $stmt -> bindValue(":sex", $_POST["sex"], PDO::PARAM_STR);
       $stmt -> bindValue(":magazine", $_POST["magazine"], PDO::PARAM_INT);
-      $stmt -> execute();
-  
+      $stmt -> bindValue(":pass", $hash, PDO::PARAM_STR);
+      try{
+        $stmt -> execute();
+        }catch(PDOException $e){
+        //エラー出力
+        echo "メールアドレスがすでに使われています";
+        exit;
+        // echo "接続に失敗しました";
+        // print_r($e);
+        }
+      }else{
+          echo "CSRF攻撃を受けたので強制終了します";
+          exit;
+      }
+    
   $page_flag = 2; //完了画面
 
   } else {
@@ -76,21 +95,19 @@ $error=array();
     body{
         padding : 50px;
     }
-
     .error{
         color : red;
     }
 </style>
-  <link rel="stylesheet" 
-  　　　 href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" 
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+      crossorigin="anonymous">
 </head>
 
 <body>
   <div class="container">
     <h1>会員登録フォーム</h1>
-    <br>
     <div class="error">
     <?php
     //エラー内容をここで出力する
@@ -102,14 +119,15 @@ $error=array();
     ?>
     </div>
     <br>
-
     <?php if ($page_flag === 1) : ?>
     <!-- 確認ページ -->
     <?php
+    //除染
     Clean();
+    //ランダムキー生成
+    $_SESSION['key'] = sha1(session_id() . '_' .microtime());
     // 二重読み込み防止
-    session_start();
-      $_SESSION['home'] = 1;
+    $_SESSION['home'] = 1;
       ?>
       <form action="" method="post">        
       <p>名前:
@@ -133,7 +151,7 @@ $error=array();
       </p>
       <p>メールマガジン:
       <?=isset($_POST['magazine'])? '送付する': '' ?></p>
-      
+    
       <form action="" method="post">
         <input type="button" onclick="history.back();" value="戻る">
         <input class="btn btn-primary col-sm-5 pull-right" type="submit" name="submit" value="送信">
@@ -143,11 +161,15 @@ $error=array();
         <input type="hidden" name="year" value="<?= $_POST["year"] ?>">
         <input type="hidden" name="sex" value="<?= $_POST["sex"] ?>">
         <input type="hidden" name="magazine" value="<?= $_POST['magazine'] ?>">
-    
+        <input type="hidden" name="token" value="<?= $_SESSION['key']?>">
+        <input type="hidden" name="pass" value="<?= $_POST['pass']?>">
+    <!-- 完了ページ -->
     <?php elseif ($page_flag === 2) : ?>
-    <p>送信完了しました！</p>
+    <p>会員登録ありがとうございました。</p>
+    <form method="POST" action="mailto">
+    <div>
+    <div>
     <input class="btn btn-primary col-sm-4 col-sm-offset-4" type="button" onClick="location.href='index.php'" value="ホームへ">
-  
    　<?php else : ?>
      <!-- 入力ページ -->
    　<form action="" method="post" enctype="multipart/form-data">
@@ -176,13 +198,25 @@ $error=array();
         <label for="magazine">メールマガジン送付</label>
         <input type="checkbox" checked name="magazine" value='1' id="magazine"><br>
     </div>
-  <br>
-  <div class ="form-group">
-  <label for="image">免許証</label><br>
-  <img src="<?php if(!empty($_FILES)){ echo './temp/' .$image['image']; }?>">
-  <br>
-  <input type="file" name="image">
-  <br>
+    <br>
+    <div class = "form-group">
+        <label>パスワード</label>
+        <input type="password" name="pass" class="form-control" maxlength="16"> 
+    <div>
+    
+    <div class = "form-group">
+        <label>パスワード確認</label>
+        <input type="password" name="pass1" class="form-control" maxlength="16"> 
+    <div>
+
+    <!-- <div class ="form-group">
+    <label for="image">免許証</label><br>
+    <img src="<?php if(!empty($_FILES)){ echo './temp/' .$image['image']; }?>">
+    <br>
+    <div class = "form-group">
+    <input type="file" name="image">
+    </div> -->
+    <br>
     <div class ="form-group">
         <input type="submit" name="confirm" value="登録">
     </div>
