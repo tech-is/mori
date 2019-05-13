@@ -7,7 +7,7 @@ $array = [["name","名前"],["kana","カナ"],["tel","電話"],["mail","mail"]];
       $fileName = $_FILES['image']['name'];
       if($fileName != "" ){
           $image = $fileName;
-          move_uploaded_file($_FILES['image']['tmp_name'],'./temp/',$image);
+          move_uploaded_file($_FILES['image']['tmp_name'],'./temp/'.$image);
     }
   }
 //送信ボタンが押されたら
@@ -209,13 +209,13 @@ if(!empty($_POST['confirm'])){
         <input type="password" name="pass1" class="form-control" maxlength="16"> 
     <div>
 
-    <!-- <div class ="form-group">
+    <div class ="form-group">
     <label for="image">免許証</label><br>
-    <img src="<?php if(!empty($_FILES)){ echo './temp/' .$image['image']; }?>">
+    <img src="<?php if(!empty($_FILES)){ echo './temp/' .$image; }?>">
     <br>
     <div class = "form-group">
-    <input type="file" name="image">
-    </div> -->
+    <input type="file" name="image" onclick>
+    </div>
     <br>
     <div class ="form-group">
         <input type="submit" name="confirm" value="登録">
