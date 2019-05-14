@@ -11,7 +11,7 @@ CodeIgniter3以上を使った一言掲示板
 ログインが完了したらDBからGETしたデータをCSV形式でダウンロード
 ## Sign_up_Form
 会員登録画面
-##Sign_Up_Form Ver 2.0
+## Sign_Up_Form Ver 2.0
 会員登録画面（機能追加予定）
 ## calender
 カレンダー（修正予定）
