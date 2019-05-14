@@ -1,10 +1,10 @@
 <div class ="form-group">
-	<label for="<?php echo $val[0]; ?>"><?php echo $val[1]; ?></label>
+	<label for="<?php echo $key; ?>"><?php echo $val; ?></label>
     <input type="text" class="form-control"
-        name="<?php echo $val[0]; ?>"
-        id="<?php echo $val[0]; ?>"
+        name="<?php echo $key; ?>"
+        id="<?php echo $key; ?>"
         value="<?php 
-        if(isset($_POST[$val[0]])){
-            echo $_POST[$val[0]];} 
+        if(isset($_POST[$key])){
+            echo $_POST[$key];} 
         ?>">
 </div>

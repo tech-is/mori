@@ -1,7 +1,6 @@
 <?php
 require_once("./core/core.php");
-$array = [["name","名前"],["kana","カナ"],["tel","電話"],["mail","mail"]];
-
+$array = array("name" => "名前", "kana"=>"カナ", "tel" => "電話", "mail"=>"mail");
 	// ファイルのアップロード
   if(!empty($_FILES)) {
       $fileName = $_FILES['image']['name'];
