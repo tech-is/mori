@@ -1,3 +1,7 @@
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
 <?php
 require_once("./core/core.php");
 $array = array("name" => "名前", "kana"=>"カナ", "tel" => "電話", "mail"=>"mail");
@@ -171,6 +175,7 @@ if(!empty($_POST['confirm'])){
     <input class="btn btn-primary col-sm-4 col-sm-offset-4" type="button" onClick="location.href='index.php'" value="ホームへ">
    　<?php else : ?>
      <!-- 入力ページ -->
+     <button onclick='$("#sex-div").toggle(200)'>a</button>
    　<form action="" method="post" enctype="multipart/form-data">
      <?php
       insert_parts($array);
@@ -187,7 +192,7 @@ if(!empty($_POST['confirm'])){
      <br>
      </div>
      <br>
-     <div class ="form-group">
+     <div id="sex-div" class ="form-group">
         <label for="sex">性別</label>
         <input type="radio" checked name="sex" value="male" id="male">男性
         <input type="radio" name="sex" value="female" id="female">女性<br>
@@ -213,7 +218,7 @@ if(!empty($_POST['confirm'])){
     <img src="<?php if(!empty($_FILES)){ echo './temp/' .$image; }?>">
     <br>
     <div class = "form-group">
-    <input type="file" name="image" onclick>
+    <input type="file" name="image">
     </div>
     <br>
     <div class ="form-group">

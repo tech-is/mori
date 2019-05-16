@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<head>
+
+</head>
+
+<body>
+
+    <div id="content"></div>
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost/bbs.php?count=5');
+        xhr.responseType = 'json';
+        xhr.onload = function (e) {
+            var res = xhr.response;
+            var html = "<table>";
+            res["bbs"].forEach(function (row) {
+                html += "<tr>";
+                html += "<td>" + row["name"] + "</td>";
+                html += "<td>" + row["text"] + "</td>";
+                html += "</tr>";
+            });
+            html += "</table>";
+
+            var content = document.getElementById("content");
+            content.innerHTML = html;
+        }
+        xhr.send();
+
+    </script>
+</body>
+
+</html>

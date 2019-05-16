@@ -3,71 +3,46 @@
 //カレンダー作り
 //***************************** */
 
+// タイムゾーンを設定
+date_default_timezone_set('Asia/Tokyo');
+
 //月送り
-$year = date("Y"); //現在の年数
-  $month = date("n");
-if(!empty($_GET["sengetu"])){
-    $month=$month-1;
-}elseif(!empty($_GET["jigetu"])){
-    $month=$month+1;
-}elseif(!empty($_GET["kongetu"])){
-    $year = date("Y");
-    $month = date("N");
+if (isset($_GET['ym'])) {
+  $ym = $_GET['ym'];
+} else {
+  // 今月の年月を表示
+  $ym = date('Y-m');
 }
 
-  // 月末日を取得
-  $last_day = date('j', mktime(0, 0, 0, $month + 1, 0, $year));
-  $calender = array();
-  $j = 0;
+// 今日の日付 フォーマット
+$today = date('Y-m-j', time());
 
-// 月末日までループ
-for ($i = 1; $i < $last_day + 1; $i++) {
- 
-  // 曜日を取得
-  $week = date('w', mktime(0, 0, 0, $month, $i, $year));
+// 前月・次月の年月を取得
+$prev = date('Y-m', mktime(0, 0, 0, date('m', $timestamp)-1, 1, date('Y', $timestamp)));
+$next = date('Y-m', mktime(0, 0, 0, date('m', $timestamp)+1, 1, date('Y', $timestamp)));
 
-  // 1日の場合
-  if ($i == 1) {
-      // 1日目の曜日までをループ
-      for ($s = 1; $s <= $week; $s++) {
+// 該当月の日数を取得
+$day_count = date('t', $timestamp);
 
-          // 前半に空文字をセット
-          $calendar[$j]['day'] = '';
-          $j++;
-      }
-  }
-  // 配列に日付をセット
-  $calendar[$j]['day'] = $i;
-  $j++;
+// 曜日を取得
+$day_of_a_week = date('w', mktime(0, 0, 0, date('m', $timestamp), 1, date('Y', $timestamp)));
 
-  // 月末日の場合
-  if ($i == $last_day) {
+$week　= str_repeat('<td></td>', $day_of_a_week);
 
-      // 月末日から残りをループ
-      for ($e = 1; $e <= 6 - $week; $e++) {
+//祝日設定処理
+$horidays = array();
+$horiname = array();
+// 内閣府ホームページの"国民の祝日について"よりデータを取得する
+$res = file_get_contents('http://www8.cao.go.jp/chosei/shukujitsu/syukujitsu_kyujitsu.csv'); //回線が不安定な時にエラー出ます
+$res = mb_convert_encoding($res, "UTF-8", "SJIS"); //文字コード変換
+$pieces = explode("\r\n", $res);
+$dummy = array_shift($pieces); //先頭の空欄削除
+$dummy = array_pop($pieces); //末尾の空欄削除
 
-          // 後半に空文字をセット
-          $calendar[$j]['day'] = '';
-          $j++;
-      }
-  }
-}
-  //祝日設定処理
-    $horidays = array();
-    $horiname = array();
-    // 内閣府ホームページの"国民の祝日について"よりデータを取得する
-    $res = file_get_contents('http://www8.cao.go.jp/chosei/shukujitsu/syukujitsu_kyujitsu.csv'); //回線が不安定な時にエラー出ます
-    $res = mb_convert_encoding($res, "UTF-8", "SJIS"); //文字コード変換
-    $pieces = explode("\r\n", $res);
-    $dummy = array_shift($pieces); //先頭の空欄削除
-    $dummy = array_pop($pieces); //末尾の空欄削除
-
-    foreach($pieces as $key => $value) {
-      $temp = explode(',', $value);
-      $holiday[$temp[0]] = $temp[1]; //keyに日付valueに祝日名を格納
+foreach($pieces as $key => $value) {
+  $temp = explode(',', $value);
+  $holiday[$temp[0]] = $temp[1]; //keyに日付valueに祝日名を格納
     }
-    // print_r($holiday);
-    // exit('プログラムを終了します');
 ?>
 
 <!DOCTYPE html>
@@ -76,16 +51,13 @@ for ($i = 1; $i < $last_day + 1; $i++) {
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container">
-   
-        <h1> 
-        <?php echo $year; ?>年<?= $month ?>月
-        </h1>
+  <div class="container">
+    <h1><?= $year; ?>年<?= $month ?>月</h1>
     </div>
     <form action="" method="GET">
-    <input type="submit" name="sengetu" value="<<">
-    <input type="submit" name="kongetu" value="今月">
-    <input type="submit" name="jigetu" value=">>">
+    <input type="submit" name="prev" value="<<">
+    <input type="submit" name="now" value="今月">
+    <input type="submit" name="next" value=">>">
     </form>
     <div class="table-responsive">
         <table class="table table-bordered">
@@ -107,7 +79,6 @@ for ($i = 1; $i < $last_day + 1; $i++) {
        // print_r($calendar);
       echo "<tr>";
       foreach ($calendar as $value){
-        // print_r($value);
         if(!empty($value['day'])){
           $d = date('Y-m-d', mktime(0, 0, 0, $month, $value['day'], $year)); //
           // echo $d.", ";

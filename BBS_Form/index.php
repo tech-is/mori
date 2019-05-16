@@ -1,5 +1,8 @@
 <?php
     require_once("./core/core.php");
+    $browser = new browser();
+    $browser_info = $browser->get_info();
+    // print_r($browser_info);
     if(isset($_POST['submit'])){
         Create();
         header ('Location: index.php');
@@ -9,15 +12,19 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <title>
-    一言掲示板
-    </title>
+    <title>一言掲示板</title>
     <?php CSS(); ?>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
 <body>
     <div class="container">
     <h1>一言掲示板</h1>
     <br>
+    <?php
+    foreach($browser_info as $key => $value ){
+        echo $key.":".$value."<br>";
+    }
+    ?>
     <script type="text/javascript"> 
     function Check(form){
         var fd1 = form.name.value.trim();
@@ -43,7 +50,7 @@
         <input type="submit" class="btn btn-primary" name="submit" value="書き込み">
     </form>
     <br>
-    <h2>書き込みログ</h2>
+    <h2><i class="fa fa-users" aria-hidden="true"></i>書き込みログ</h2>
     <br>
     <?php Load_BBS(); ?>
     </div> <!-- <div class="container"> -->
