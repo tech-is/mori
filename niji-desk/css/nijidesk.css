@@ -1,0 +1,78 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+h1 > div{ 
+    font-family: "Nico Moji";
+    text-align: center;
+    font-size: 70px;
+    font-weight: 600;
+    display: block;
+    padding: 10px; 
+}
+body > div:first-child{
+    background-color:#00BCD4;
+}
+body > div:first-child > div{
+    margin: auto;
+    overflow: hidden;
+}
+body > div:first-child > div p{
+    margin-bottom: unset;
+}
+p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 19px;
+    font-weight: 600;
+    padding: 5px; 
+}
+.container >div{
+    text-align: center;
+}
+
+.container > p::before,.container > p::after{
+    content: "";
+    display: block;
+    width: 60px;
+    border-top:2px solid black;
+}
+.container > p::before{
+    margin-right: 10px;
+}
+.container > p::after{
+    margin-left: 10px;
+}
+.col-4 {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.col-4 > li{
+    cursor: pointer;
+    min-width: 100px;
+}
+.col-4 > li.nav-item > a.nav-link{
+    padding: 10px 0;
+}
+body > a > div{
+    color: black;
+    text-align: right;
+    padding: 20px;
+}
+
+.nav-pills .nav-item i {
+    display: block;
+    font-size: 30px;
+    padding: 15px 0;
+}
+.nav-pills .nav-item .nav-link.active {
+    color: #fff;
+    background-color: #9c27b0;
+    box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(156, 39, 176, 0.6);
+}
+.nav-pills .nav-item .nav-link {
+    text-align: center;
+}
