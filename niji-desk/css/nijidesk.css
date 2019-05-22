@@ -1,7 +1,5 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+.nav-item{
+    cursor: pointer;
 }
 
 h1 > div{ 
@@ -10,13 +8,14 @@ h1 > div{
     font-size: 70px;
     font-weight: 600;
     display: block;
-    padding: 10px; 
+    margin: 30px;
 }
 body > div:first-child{
     background-color:#00BCD4;
 }
 body > div:first-child > div{
     margin: auto;
+    padding-bottom: 15px;
     overflow: hidden;
 }
 body > div:first-child > div p{
@@ -30,32 +29,22 @@ p {
     font-weight: 600;
     padding: 5px; 
 }
-.container >div{
+
+.container-fluid >div{
     text-align: center;
 }
 
-.container > p::before,.container > p::after{
+.container-fluid > p::before,.container-fluid > p::after{
     content: "";
     display: block;
     width: 60px;
     border-top:2px solid black;
 }
-.container > p::before{
+.container-fluid > p::before{
     margin-right: 10px;
 }
-.container > p::after{
+.container-fluid > p::after{
     margin-left: 10px;
-}
-.col-4 {
-    padding-top: 15px;
-    padding-bottom: 15px;
-}
-.col-4 > li{
-    cursor: pointer;
-    min-width: 100px;
-}
-.col-4 > li.nav-item > a.nav-link{
-    padding: 10px 0;
 }
 body > a > div{
     color: black;
@@ -71,8 +60,14 @@ body > a > div{
 .nav-pills .nav-item .nav-link.active {
     color: #fff;
     background-color: #9c27b0;
-    box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(156, 39, 176, 0.6);
+    /* box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(156, 39, 176, 0.6); */
 }
 .nav-pills .nav-item .nav-link {
     text-align: center;
+}
+
+.hoge{
+    background-color: #9c27b0;
+    width: 100%;
+    margin-bottom: 10px;
 }

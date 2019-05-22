@@ -1,0 +1,15 @@
+{
+    "short_name": "ニジデスク",
+    "name": "ニジデスク",
+    "start_url": ".",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "icon.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        }
+    ],
+    "background_color": "#2196F3",
+    "orientation": "portrait"
+}
