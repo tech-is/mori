@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="ecl.js"></script>
+    <script src="splash.js"></script>
+    <script src="niji-desk.js"></script>
+
+    <!-- CSS -->
+    <!--     Fonts and icons     -->
+    <link rel="stylesheet" type="text/css"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/earlyaccess/nicomoji.css" rel="stylesheet">
+    <!-- CSS Files -->
+    <link href="./css/material-kit.css?v=2.0.5" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="niji-desk.css">
+    <!-- bootstrap/4.3.1 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <div style="background-color:#00BCD4;">
+        <nav class="navbar navbar-dark bg-dark">
+            <a href="#" class="navbar-brand">Tech-M</a>
+        </nav>
+        <h1>
+            <div class="Main-nicomoji">ニジデスク</div>
+        </h1>
+        <div class="sub-logo">
+            <p>アニメや漫画専門の検索デスクです</p>
+        </div>
+        <form action="" id="form">
+            <div class="row justify-content-center">
+                <div class="form-group">
+                    <p><input type="search" class="form-control" id="word" style="width:400px;" value=""></p>
+                    <input type="text" name="dummy" style="display:none;">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="container">
+        <div class="sub-logo">
+            <p>検索サイト一覧</p>
+        </div>
+        <div id="btnParent"></div>
+        <script>
+            $(function () {
+                var html = "";
+                var i = 1;
+                for (key in btnArray) {
+                    var btn = btnArray[key];
+                    if (i % 3 == 0) {
+                        html += `<div class="col-4">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id=${key} role="tab" data-toggle="tab">
+                                                <i class="material-icons">pageview</i> ${key}
+                                            </a>
+                                        </li>
+                                    </div>
+                                    </ul>
+                                    </div>
+                                    </div>
+                                    <div class="row justify-content-around">
+                                        <div class="profile-tabs">
+                                            <ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">`;
+                        i++;
+                    } else if (i == 1) {
+                        html += `<div class="row justify-content-around">
+                                            <div class="profile-tabs">
+                                                <ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">
+                                                    <div class="col-4">
+                                                        <li class="nav-item">
+                                                            <a class="nav-link active" id=${key} role="tab" data-toggle="tab">
+                                                                <i class="material-icons">pageview</i> ${key}
+                                                            </a>
+                                                        </li>
+                                                    </div>`;
+                        i++;
+                    } else {
+                        html += `<div class="col-4">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id=${key} role="tab" data-toggle="tab">
+                                                <i class="material-icons">pageview</i> ${key}
+                                            </a>
+                                        </li>
+                                </div>`;
+                        i++;
+                    }
+                }
+                html += `</div>`
+                $("#btnParent").html(html);
+                $('a').on('click', function () {
+                    var id = $(this).attr("id");
+                    var btn = btnArray[id];
+                    var word = $("#word").val();
+                    if (word) {
+                        if (btn.encode === 'SJIS') {
+                            word = EscapeSJIS(word);
+                        }
+                        var url = btn.url + word;
+                        window.open(url, '_blank');
+                    } else {
+                        splash("キーワードを入力してください");
+                    }
+                });
+            });
+        </script>
+    </div>
+</body>
+
+</html>
