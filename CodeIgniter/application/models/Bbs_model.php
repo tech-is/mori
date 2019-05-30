@@ -1,10 +1,6 @@
 <?php
 class Bbs_model extends CI_Model {
 
-	// public $id;
-	// public $name;
-	// public $body;
-
     public function __construct() {
 		// Call the CI_Model constructor
 		parent::__construct();

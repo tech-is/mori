@@ -25,8 +25,8 @@ $mailer->IsSMTP();//SMTPを作成
 $mailer->Host = 'smtp.gmail.com';//Gmailを使うのでメールの環境に合わせてね
 $mailer->CharSet = 'utf-8';//文字セットこれでOK
 $mailer->SMTPAuth = TRUE;//SMTP認証を有効にする
-$mailer->Username = 'delta0716@gmail.com'; // Gmailのユーザー名
-$mailer->Password = 'g00glem0r1h1r0n0bu'; // Gmailのパスワード
+$mailer->Username = ''; // Gmailのユーザー名
+$mailer->Password = ''; // Gmailのパスワード
 $mailer->SMTPSecure = 'tls';//SSLも使えると公式で言ってます
 $mailer->Port = 587;//tlsは587でOK
 $mailer->SMTPDebug = 2;//2は詳細デバッグ1は簡易デバッグ本番はコメントアウトして

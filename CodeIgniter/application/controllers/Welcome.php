@@ -36,7 +36,6 @@ class Welcome extends CI_Controller {
 		$config["base_url"] = 'http://localhost/CodeIgniter/index.php/welcome/index';
 		$config["total_rows"] = $this->db->get("bbs_laravel")->num_rows();
 		$config["per_page"] = 5;
-		$config['use_page_numbers'] = TRUE;
 		$this->pagination->initialize($config);
 		$this->db->select('id, name, body');
 		$this->db->order_by('id', 'DESC');
