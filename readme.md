@@ -15,6 +15,11 @@ CodeIgniter3以上を使った一言掲示板
 会員登録画面（機能追加予定）
 ## calender
 カレンダー（修正予定）
+## Function_Drill
+関数ドリル課題提出
+## Login_for_CodeLgniter
+CodeIgniter3使用
+ログイン後に掲示板も実装予定
 
 
 
