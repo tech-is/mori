@@ -1,6 +1,5 @@
 <?php
 $title = "Login";
-$error = "";
 include __DIR__ . '/layout/layout.php'; ?>
 	<div class="container">
 		<div class="Main-logo">
@@ -9,7 +8,9 @@ include __DIR__ . '/layout/layout.php'; ?>
 		<div class="normal-logo">
 			<p>UserIDとパスワードを入力してください</p>
 		</div>
-		<?php $error ? $error : "" ; ?> 
+		<div class="error">
+			<p><?php isset($error) ? print $error : print "" ; ?></p>
+		</div>
 		<?= form_open("main/login_validation"); ?>
 		<!-- メールアドレス -->
 		<div class ="form-group">

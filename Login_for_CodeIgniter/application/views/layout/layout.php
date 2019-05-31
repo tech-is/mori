@@ -8,5 +8,14 @@
 </head>
 <body>
 	<nav class="navbar navbar-dark bg-dark">
-	<a href="index" class="navbar-brand">Tech-M</a>
+		<a href="index" class="navbar-brand">Tech-M</a>
+		<a class="navbar-item nav-link">
+		<?php if(isset($_SESSION['name']))
+		{
+			echo $_SESSION['name'];
+		}else{
+			echo "Login";
+		}
+		?>
+	</a>
 	</nav>

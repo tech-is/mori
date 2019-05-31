@@ -1,24 +1,28 @@
 <?php
 $title ="Main";
 include __DIR__ . '/layout/layout.php';
+$array = [["name", "名前"], ["body", "本文"], ["date", "書込日時"]];
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-    </style>
-    <meta charset="utf-8">
-    <!-- Bootstrap4.3.1 -->
-    <script src="https://code.jquery.com/jquery-3.4.1.js"
-        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<!-- fontawesome -->
-	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-</head>
-<body>
+<div class="container">
     <div class="Main-logo">
-        <h1>ヤバいですね！</h1>
+        <h1>ようこそ！<?= $_SESSION['name'] ?>さん</h1>
     </div>
+    <?= form_open();?>
+        <p><input type="text" name="name" class="form-control" placeholder="名無しさん" value="<?= $_SESSION['name'] ?>"></p>
+        <p><textarea name="body" class="form-control maxlength="100"></textarea></p>
+    <?= form_close(); ?>
+    <p><?php /*print_r ($this->session->all_userdata()); */?></p>
+    <!-- <p><a href="logout"><button class="btn btn-primary" name="logout">ログアウト</button></a></p> -->
+    <table class="table table-border">
+        <tr>
+            <?php foreach($array as $value): ?>
+                <th><?=$value[1]?></th>
+            <?php endforeach; ?>
+        </tr>
+        <tr>
+            
+        </tr>
+    </table>
+</div>
 </body>
 </html>

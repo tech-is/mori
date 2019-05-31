@@ -3,22 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Main extends CI_Controller
 {
-
-    /**
-     * Index Page for this controller.
-     *
-     * Maps to the following URL
-     * 		http://example.com/index.php/welcome
-     *	- or -
-     * 		http://example.com/index.php/welcome/index
-     *	- or -
-     * Since this controller is set as the default controller in
-     * config/routes.php, it's displayed at http://example.com/
-     *
-     * So any other public methods not prefixed with an underscore will
-     * map to /index.php/welcome/<method_name>
-     * @see https://codeigniter.com/user_guide/general/urls.html
-     */
+	
     public function index()
     {
 		$this->login();
@@ -26,7 +11,11 @@ class Main extends CI_Controller
     
     public function login()
     {
-        $this->load->view('login');
+		if($this->session->userdata("is_logged_in")){
+			$this->load->view("members");
+		}else{
+        	$this->load->view('login');
+		}
     }
 
 	public function logout(){
@@ -36,7 +25,11 @@ class Main extends CI_Controller
 	
 	public function members()
 	{
-		$this->load->view("members");
+		if($this->session->userdata("is_logged_in")){
+			$this->load->view("members");
+		} else {
+			redirect ("main/login");
+		}
 	}
     
 	public function signup()
@@ -66,11 +59,20 @@ class Main extends CI_Controller
 					],
 			];
         $this->form_validation->set_rules($config);
-		if ($this->form_validation->run()) {	//バリデーションエラーがなかった場合の処理
+		if ($this->form_validation->run()) {
             $this->load->model("model_member");
 			$rows = $this->model_member->login();
 			if(password_verify($this->input->post("pass") ,$rows[0]["password"]) == true) {
+				$data = array(
+					"name" => $rows[0]["name"],
+					"mail" => $this->input->post("mail"),
+					"is_logged_in" => 1
+				);
+				$this->session->set_userdata($data);
 				redirect("main/members");
+			}else{
+				$data["error"] = "メールアドレスかパスワードが不正です";
+				$this->load->view("login", $data);
 			}
 		}else{
 			$this->load->view("login");

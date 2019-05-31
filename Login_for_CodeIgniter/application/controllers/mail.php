@@ -1,6 +1,17 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * メールアドレスのデバック用オブジェクト
+ * 使用する際はmail/indexで
+ * @param	$this->email->from($string , $string) 第一引数:使用するメールアドレス
+ * @param	$this->email->to($string) 送り先のメールアドレス
+ * @param	$this->email->subject
+ * @param	$this->email->message
+ * 
+ * @return 
+ */
+
 class Mail extends CI_Controller
 {
 	public function index(){
