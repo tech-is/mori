@@ -1,5 +1,5 @@
-# Readme
-## ファイルツリー
+Readme
+ファイルツリー
 │  .editorconfig
 │  .gitignore
 │  composer.json
@@ -615,7 +615,7 @@
                 oldtheme.js
                 theme.js
 
-# 課題作成場所
+課題作成場所
 applicationフォルダにあるcotntrollersフォルダの中の
 welcome.phpの各メソッドを読み込めば結果が出力されます。
 
