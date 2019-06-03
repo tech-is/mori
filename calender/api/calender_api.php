@@ -96,8 +96,6 @@ if(isset($_GET['year'])){
             $week = '';
         }
     }
-    // header('content-type: application/json; charset=utf-8');
-    // print_r(json_encode($weeks, JSON_PRETTY_PRINT));
 ?>
 <h3><?= $html_title?></h3>
 <button class='btn btn-primary' data-year=<?=$prev?>>prev</button>
