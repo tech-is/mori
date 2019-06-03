@@ -59,6 +59,7 @@ class dbconnect {
         print_r(json_encode($a, JSON_PRETTY_PRINT));
     }
 }
+
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $count = $_GET['count'];
         $obj = new dbconnect();

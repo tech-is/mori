@@ -13,7 +13,7 @@ class Welcome extends CI_Controller {
 		$i=4;
 		$r=5;
 		echo $i+$r. "<br><br>";
-		$this->javascript();
+		$this->file_name();
 	}
 /**
  * * * * * * * 

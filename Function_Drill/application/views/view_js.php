@@ -21,7 +21,6 @@
     <p><a href="javascript:change_text()">おいっすー！</a></p>
     <p><div id="text"></p>
     <p>じゃんけん</p>
-    
 <script>
     function name_alert()
     {
