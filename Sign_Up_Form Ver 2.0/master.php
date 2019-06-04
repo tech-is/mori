@@ -1,8 +1,6 @@
 <?php
 require_once('./core/core.php');
-if(isset($_POST['submit']){
-    
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">

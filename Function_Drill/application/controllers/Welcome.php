@@ -13,7 +13,7 @@ class Welcome extends CI_Controller {
 		$i=4;
 		$r=5;
 		echo $i+$r. "<br><br>";
-		$this->file_name();
+		$this->array();
 	}
 /**
  * * * * * * * 
@@ -141,6 +141,7 @@ class Welcome extends CI_Controller {
  */
 	public function array()
 	{
+	$this->benchmark->mark('code_start');
 		$horse = [
 			"ディープインパクト" => [
 				"牝馬",
@@ -203,6 +204,8 @@ class Welcome extends CI_Controller {
 			echo "父:" . $value[1]. "<br>";
 			echo "母:" .$value[2]. "<br><br>";
 		}
+		$this->benchmark->mark('code_end');
+		echo $this->benchmark->elapsed_time('code_start', 'code_end');
 	}
 /**
  * * * * * * * *    

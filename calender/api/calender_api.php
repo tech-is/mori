@@ -2,17 +2,24 @@
 /**
  * 
  * @param $ym 出力する年月を格納
+ * @param $weeks カレンダーに出力する日付を格納
  * @return カレンダーを出力        
  * 
  */
-$table_class= "table table-bordered";
+if(isset($_GET['class'])){
+    $table_class = $_GET['class'];
+}else{
+    $table_class = "table table-bordered";
+}
 if(isset($_GET['month'])){
     $ym = $_GET['month'];
+}else{
+    $ym = date('Y-m');
 }
     // タイムゾーンを設定
     date_default_timezone_set('Asia/Tokyo');
     // 前月・次月リンクが押された場合は、GETパラメーターから年月を取得
-    isset($ym) ? $ym : $ym = date('Y-m');
+    // isset($ym) ? $ym : $ym = date('Y-m');
     
     // 現在の日時を取得
     $today = date('Y-m-d');
@@ -66,7 +73,6 @@ if(isset($_GET['month'])){
         $days = date('Y年m月j日', mktime(0, 0, 0, date('m', $timestamp), $day, date('Y', $timestamp)));
         $day2 = sprintf('%02d', $day);
         $date = $ym . '-' . $day2;
-        // echo $date . "\n";
         $result = array_search($date,array_column($holidays,'0'));
         if ($result === false){
             $datestr= $day;
@@ -122,3 +128,18 @@ if(isset($_GET['month'])){
         }
     ?>
 </table>
+<!-- <script>
+    $(function () {
+        $('.btn').on('click', function () {
+            var month = $(this).data('month')
+            $.ajax({
+                url: "./calender_api.php",
+                type: "get",
+                data: {
+                    "month": month
+                }
+            }).done((data) => {
+                $("#calender").html(data);
+            })
+        });
+</script> -->

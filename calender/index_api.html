@@ -13,6 +13,8 @@
 <body>
     <div class="container">
         <button onclick="index()">押すなよ！絶対押すなよ！</button>
+        <br>
+        <br>
         <div id="calender"></div>
         <script type="text/javascript" charset="UTF-8">
             // $(function () {
@@ -21,6 +23,10 @@
             function index() {
                 $.ajax({
                     url: "./api/calender_api.php",
+                    type: "get",
+                    data: {
+                        "class": "table table-dark"
+                    }
                 }).done((data) => {
                     $("#calender").html(data);
                 });
