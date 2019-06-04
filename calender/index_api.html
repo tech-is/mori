@@ -31,12 +31,12 @@
     <script>
         $(function () {
             $('#calender').on('click', '.btn', function () {
-                var year = $(this).data('year')
+                var month = $(this).data('month')
                 $.ajax({
                     url: "./api/calender_api.php",
                     type: "get",
                     data: {
-                        "year": year
+                        "month": month
                     }
                 }).done((data) => {
                     $("#calender").html(data);

@@ -1,12 +1,13 @@
 <?php
 /**
  * 
- * @param $ym 年月を格納
- * @return json形式でカレンダーのデータを格納        
+ * @param $ym 出力する年月を格納
+ * @return カレンダーを出力        
  * 
  */
-if(isset($_GET['year'])){
-    $ym = $_GET['year'];
+$table_class= "table table-bordered";
+if(isset($_GET['month'])){
+    $ym = $_GET['month'];
 }
     // タイムゾーンを設定
     date_default_timezone_set('Asia/Tokyo');
@@ -98,12 +99,12 @@ if(isset($_GET['year'])){
     }
 ?>
 <h3><?= $html_title?></h3>
-<button class='btn btn-primary' data-year=<?=$prev?>>prev</button>
-<button class='btn btn-primary' data-year=<?=date('Y-m')?>>Current</button>
-<button class='btn btn-primary' data-year=<?=$next?>>next</button>
+<button class='btn btn-primary' data-month=<?=$prev?>>prev</button>
+<button class='btn btn-primary' data-month=<?=date('Y-m')?>>Current</button>
+<button class='btn btn-primary' data-month=<?=$next?>>next</button>
 <br>
 <br>
-<table class="table table-bordered">
+<table class="<?= $table_class ?>">
     <tr>
         <thead>
             <th>日</th>
