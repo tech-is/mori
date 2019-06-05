@@ -3,7 +3,7 @@
 }
 
 .Main-logo {
-    /* text-align: center; */
+    text-align: center;
     color: #000;
     font-size: 60px;
     font-weight: bold;
@@ -18,7 +18,7 @@
     margin: 30px;
 }
 
-#error {
+.error-info {
     color: red;
     font-weight: bold;
 }
