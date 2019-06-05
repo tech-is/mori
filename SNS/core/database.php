@@ -30,7 +30,7 @@ class dbconnect {
         return $items;
     }
     //SELECT,INSERT,UPDATE,DELETE文の時に使用する関数。
-    public function plural($sql,$item){
+    public function plural($sql, $item){
         $hoge=$this->pdo();
         $stmt=$hoge->prepare($sql);
         $stmt->execute(array(':id'=>$item));//sql文のVALUES等の値が?の場合は$itemでもいい。

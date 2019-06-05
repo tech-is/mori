@@ -11,7 +11,7 @@
 		</div>
 		<div id="error"></div>
 		<!-- メールアドレス -->
-        <form method="post" action="">
+        <form method="post" action="" onSubmit="return check(this)">
 		<div class ="form-group">
 			<input type = "text" name="mail" placeholder = "メールアドレス" class="form-control">
 		</div>
@@ -26,11 +26,11 @@
 			</label></p>
 		</div>
 		<div class="btn-group">
-			<p><button type="submit" class="btn btn-primary">Login</button></p>
+			<p><input type="submit" class="btn btn-primary" value="Login"></p>
 		</div>
         </form>
 		<p class="a-tag"><a href="">IDかパスワードを忘れたら？</a></p>
 		<p class="a-tag"><a href="./signup.php">新規会員登録</a></p>
 	</div>
 </body>
-</html> 
+</html>
