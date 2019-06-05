@@ -15,7 +15,7 @@ include('./core/core.php');
             </div>
             <div class="form-group">
                 <label for="mail">メールアドレス</label>
-                <input type="text" class="form-control require" id="mail" placeholder="メールアドレスを入力">
+                <input type="text" class="form-control require" id="mail" placeholder="メールアドレスを入力" maxlength="200">
             </div>
             <p><button class="btn btn-primary" name="send">送信</button></p>
         </form>
