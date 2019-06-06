@@ -1,6 +1,4 @@
-<?php 
-include('./core/core.php');
-?>
+<?php include('./core/core.php'); ?>
 <link rel="stylesheet" type="text/css" href="./css/signup.css">
 </head>
 <body>

@@ -20,56 +20,59 @@ $(function () {
                 //エラーを消す
                 $(this).next('span.error-info').remove();
             }
-            mail_validation();
+            unforcus_mail_validation();
         }
     });
     submit_valdation();
 });
 
-function mail_validation() {
-    $('input#mail').on('blur', function () {
-        // $('input#mail').nextAll('span.error-info').remove();
-        if (!$(this).val().match(/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
-            var error = true;
-        } else {
-            $(this).nextAll('span.error-info').remove();
-        };
-        if (error) {
-            //エラー時の処理
-            if (!$(this).next('span.error-info').length) {
-                //メッセージを後ろに追加
-                $(this).after('<span class = "error-info">メールアドレスが不正です</span>');
-            }
-        } else {
-            //エラーじゃないのにメッセージがあったら
-            if ($(this).next('span.error-info').length) {
-                //エラーを消す
-                $(this).next('span.error-info').remove();
-            }
+function unforcus_mail_validation() {
+    let error;
+    let mail = 'input#mail';
+    $(mail).nextAll('span.error-info').remove();
+    if (!$(mail).val().match(/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
+        error = true;
+    } else {
+        $(mail).next('span.error-info').remove();
+    };
+    if (error) {
+        //エラー時の処理
+        if (!$(mail).next('span.error-info').length) {
+            //メッセージを後ろに追加
+            $(mail).after('<span class = "error-info">メールアドレスが不正です</span>');
         }
-    });
-}
+    } else {
+        //エラーじゃないのにメッセージがあったら
+        if ($(mail).next('span.error-info').length) {
+            //エラーを消す
+            $(mail).next('span.error-info').remove();
+        }
+    }
+};
 
 function submit_valdation() {
     $('form').submit(function () {
-        $('input').next('span.error-info').remove();
-        var error;
-        if ($('input').val() == "") {
-            $('input').after('<span class = "error-info">入力してください</span>');
+        let name = 'input#nickname';
+        let error;
+        $(name).next('span.error-info').remove();
+        if ($(name).val() == "" || !$(name).val().match(/[^\s\t]/)) {
             error = true;
-            return false;
+            $(name).after('<span class = "error-info">ニックネームが不正です</span>');
+        } else {
+            $(name).next('span.error-info').remove();
         }
-        if (!error === true) {
-            $('input#mail').next('span.error-info').remove();
-            if (!$('input#mail').val().match(/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
-                $('input#mail').after('<span class = "error-info">メールアドレスが不正です</span>');
-                error = true;
-            }
-            if (error) {
-                return false;
-            } else {
-                return true;
-            }
+        let mail = 'input#mail';
+        $(mail).next('span.error-info').remove();
+        if (!$(mail).val().match(/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
+            error = true;
+            $(mail).after('<span class = "error-info">メールアドレスが不正です</span>');
+        } else {
+            $(mail).next('span.error-info').remove();
+        };
+        if (error) {
+            return false
+        } else {
+            return true;
         }
     });
 }

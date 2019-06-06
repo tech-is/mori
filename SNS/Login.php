@@ -11,7 +11,7 @@
 		</div>
 		<div id="error"></div>
 		<!-- メールアドレス -->
-        <form method="post" action="" onSubmit="return check(this)">
+        <form method="post" action="dbconect">
 		<div class ="form-group">
 			<input type = "text" name="mail" placeholder = "メールアドレス" class="form-control">
 		</div>
