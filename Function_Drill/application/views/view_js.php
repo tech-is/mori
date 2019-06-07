@@ -20,7 +20,6 @@
     <p>任意の場所に文字表示</p>
     <p><a href="javascript:change_text()">おいっすー！</a></p>
     <p><div id="text"></p>
-    <p>じゃんけん</p>
 <script>
     function name_alert()
     {

@@ -2,6 +2,12 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Welcome extends CI_Controller {
+	public function __construct() 
+	{
+	parent::__construct();
+	$this->load->helper('url');  // redirect
+    }
+	
 /**
  * * * * * * * 
  * 関数ドリル *
@@ -9,11 +15,7 @@ class Welcome extends CI_Controller {
  */
 	public function index()
 	{
-		echo " 4 + 5 = 9を変数で表示<br>";
-		$i=4;
-		$r=5;
-		echo $i+$r. "<br><br>";
-		$this->array();
+		$this->keydam();
 	}
 /**
  * * * * * * * 
@@ -22,6 +24,10 @@ class Welcome extends CI_Controller {
  */
 	public function loop()
 	{
+		echo " 4 + 5 = 9を変数で表示<br>";
+		$i=4;
+		$r=5;
+		echo $i+$r. "<br><br>";
 		//100まで出力
 		echo "100まで出力<br>";
 		for($i=1; $i<=100; $i++)
@@ -70,7 +76,7 @@ class Welcome extends CI_Controller {
 				case 55: 
 					echo "\n";
 					break;
-				default;
+				default:
 					echo $i."\n";
 					break;		
 			}
@@ -263,5 +269,28 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->view('view_js');
 	}
+/**
+ * * * * * * *
+ * じゃんけん *
+ * * * * * * *
+ */
+	public function Janken()
+	{
+		$this->load->view('janken');
+	}
+/**
+ * * * *
+ * 電卓 *
+ * * * *
+ */
+	public function keydam()
+	{
+		$this->load->view('keydam');
+	}
 
+	public function keydam_result()
+	{
+		$keydam = $this->input->get('keydam');
+		echo eval ($keydam);
+	}
 }
