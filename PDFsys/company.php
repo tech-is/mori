@@ -10,12 +10,6 @@ $form_array =[
     ['hurikomi_name', '振込人名義'],
 ];
 $pdf_td_array = ['品名', '数量', '単価', '金額', '詳細', '月表示'];
-$pdf_tableform_array = ["<textarea name='item_name' rows='3'></textarea>",
-                        "<input type='num' name='item_amount'>",
-                        "<input type='num' name='price'>",
-                        "<input type='num' name='total_price'>",
-                        "<textarea name='detail' rows='3'></textarea>"
-                       ]; 
 ?>
 <div class='container'>
 <div class='nav_2'>
@@ -94,15 +88,22 @@ $pdf_tableform_array = ["<textarea name='item_name' rows='3'></textarea>",
         <?php endforeach; ?>
     </tr>
     <?php for($i=1; $i<=7; $i++): ?>
+    <input type='hidden' name='pdf_id' value='<?= $i ?>'>
     <tr>
         <td>
-            <input type='hidden' name='pdf_id' value='<?= $i ?>'>
+            <textarea name='item_name'></textarea>
         </td>
-        <?php foreach($pdf_tableform_array as $val) : ?>
         <td>
-            <?= $val ?>
+            <input type='num' name='item_amount'>
         </td>
-        <?php endforeach; ?>
+        <td>
+            <input type='num' name='price'>
+        </td>
+        <td>
+            <input type='num' name='total_price'>
+        <td>
+            <textarea name='detail'></textarea>
+        </td>
         <td>
             <input type='radio' name='show_month'>非表示
             <input type='radio' name='show_month'>当月

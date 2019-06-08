@@ -8,27 +8,16 @@ $form_array = [
     ['seeds', '種別'],
     ['memo', '管理メモ']
 ];
-$mail_form = [
-    ['mail_template_subject', 'タイトル'],
-    ['mail_template_subject', '本文'],
-    ['追加添付1'],
-    ['追加添付2'],
-    ['追加添付3']
-];
+isset($_POST['mail_template_subject'])? $mail_subject = $_POST['mail_template_subject']: $mail_subject = "";
+isset($_POST['mail_template_body'])? $mail_body = $_POST['mail_template_body']: $mail_body = "";
 $pdf_td_array = ['品名', '数量', '単価', '金額', '詳細', '月表示'];
-$pdf_tableform_array = ["<textarea name='item_name'></textarea>",
-                        "<input type='num' name='item_amount'>",
-                        "<input type='num' name='price'>",
-                        "<input type='num' name='total_price'>",
-                        "<textarea name='detail'></textarea>"
-                       ]; 
 ?>
 <div class='container'>
 <div class='nav_2'>
     <h2>PDF作成</h2>
 </div>
 <p><strong>取引先情報</strong></p>
-<form method='POST' action=''>
+<form method='POST' action='send_mail.php'>
 <table border='1'>
 <?php foreach($form_array as $val): ?>
 <?php switch($val[0]):
@@ -68,31 +57,30 @@ $pdf_tableform_array = ["<textarea name='item_name'></textarea>",
 <?php endswitch; ?> 
 <?php endforeach; ?>
 </table>
-</form>
+
 <?php ?>
 <form method='POST' action=''>
-<h3>メール文</h3>
+<p><strong>メール文<strong></p>
 <table border='1'>
 <tr>
     <td>
-        <label for ='mail_template_subject'>タイトル</label>
+        タイトル
     </td>
     <td>
-        <input type='text' name='mail_template_subject'>
+        <input type='text' name='mail_template_subject' value='<?= $mail_subject ?>'>
     </td>
 </tr>
 <tr>
     <td>
-        <label for ='mail_template_subject'>本文</label>
+        本文
     </td>
     <td>
         <textarea name='mail_template_subject'></textarea>
     </td>
 </tr>
 </table>
-</form>
 
-<h4>PDF作成時</h4>
+<p><strong>PDF作成時</strong></p>
 <?php for($a=1; $a<=5; $a++): ?>
     <table border='1'>
     <tr>
@@ -110,15 +98,22 @@ $pdf_tableform_array = ["<textarea name='item_name'></textarea>",
         <?php endforeach; ?>
     </tr>
     <?php for($i=1; $i<=7; $i++): ?>
+    <input type='hidden' name='pdf_id' value='<?= $i ?>'>
     <tr>
         <td>
-            <input type='hidden' name='pdf_id' value='<?= $i ?>'>
+            <textarea name='item_name'></textarea>
         </td>
-        <?php foreach($pdf_tableform_array as $val) : ?>
         <td>
-            <?= $val ?>
+            <input type='num' name='item_amount'>
         </td>
-        <?php endforeach; ?>
+        <td>
+            <input type='num' name='price'>
+        </td>
+        <td>
+            <input type='num' name='total_price'>
+        <td>
+            <textarea name='detail'></textarea>
+        </td>
         <td>
             <input type='radio' name='show_month'>非表示
             <input type='radio' name='show_month'>当月
@@ -129,5 +124,6 @@ $pdf_tableform_array = ["<textarea name='item_name'></textarea>",
     <br>
     </table>
 <?php endfor; ?>
-<button>PDFを作成する</button>　<button>リセット</button>
+</form>
+<button type='submit'>PDFを作成する</button>　<button>リセット</button>
 </div>

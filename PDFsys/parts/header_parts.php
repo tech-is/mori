@@ -29,6 +29,7 @@
     }
     tr>:first-child
     {
+        width: 250px;
         background-color: #B4C6E7;
     }
     td>input[type="text"]
@@ -45,10 +46,21 @@
         border:0px;
         outline-style:none;
     }
+    textarea
+    {
+        width: 100%;
+        height: calc( 1.3em * 5 );
+        line-height: 1.3;
+    }
+    {
+    button, input, select, textarea 
+    font-family : inherit;
+    font-size   : 100%;
+    }   
 </style>
 </head>
 <body>
     <div class="nav_1">
         <h1>見積書、請求書、領収書の管理アプリ</h1>
-        <a href="#">取引先一覧</a>　　　　　<a href="#">メール送信履歴一覧</a>
+        <a href="index.php">取引先一覧</a>　　　　　<a href="#">メール送信履歴一覧</a>
     </div>
