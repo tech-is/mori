@@ -54,9 +54,7 @@ $pdf_tableform_array = ["<textarea name='item_name' rows='3'></textarea>",
     </td>
 </tr>
 </table>
-</form>
 <?php ?>
-<form method='POST' action=''>
 <h3>メールテンプレート</h3>
 <table border='1'>
 <tr>
@@ -76,7 +74,7 @@ $pdf_tableform_array = ["<textarea name='item_name' rows='3'></textarea>",
     </td>
 </tr>
 </table>
-</form>
+
 
 <h4>PDF作成時の初期テンプレート、品名設定</h4>
 <?php for($a=1; $a<=5; $a++): ?>
@@ -116,4 +114,5 @@ $pdf_tableform_array = ["<textarea name='item_name' rows='3'></textarea>",
     </table>
 <?php endfor; ?>
 <button>更新する</button>　<button>リセット</button>
+</form>
 </div>

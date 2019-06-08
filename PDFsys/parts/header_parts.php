@@ -24,8 +24,12 @@
 
     .nav_2
     {
-        background-color: 333F4F;
+        background-color: #333F4F;
         color: white;
+    }
+    tr>:first-child
+    {
+        background-color: #B4C6E7;
     }
     td>input[type="text"]
     {

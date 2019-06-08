@@ -1,13 +1,19 @@
 <?php
 include('parts/header_parts.php'); 
-$form_array =[
+$form_array = [
     ['name', '取引先'],
     ['manager', '担当者名'],
-    ['mail_addr_1', 'メールアドレス1'], 
-    ['mail_addr_2', 'メールアドレス2'], 
-    ['mail_addr_3', 'メールアドレス3'],
-    ['send_date', '送信日'],
-    ['hurikomi_name', '振込人名義']
+    ['mail', 'メールアドレス', 'mail_addr_1', 'mail_addr_2', 'mail_addr_3'],
+    ['send_date', '送信日 <span style = "color: red">必須</span>'],
+    ['seeds', '種別'],
+    ['memo', '管理メモ']
+];
+$mail_form = [
+    ['mail_template_subject', 'タイトル'],
+    ['mail_template_subject', '本文'],
+    ['追加添付1'],
+    ['追加添付2'],
+    ['追加添付3']
 ];
 $pdf_td_array = ['品名', '数量', '単価', '金額', '詳細', '月表示'];
 $pdf_tableform_array = ["<textarea name='item_name'></textarea>",
@@ -25,39 +31,47 @@ $pdf_tableform_array = ["<textarea name='item_name'></textarea>",
 <form method='POST' action=''>
 <table border='1'>
 <?php foreach($form_array as $val): ?>
+<?php switch($val[0]):
+    case('mail'): ?>
+        <tr>
+            <td>
+                <?= $val[1] ?>
+            </td>
+            <td>
+                <?= isset($_POST[$val[2]])? $_POST[$val[2]] : false; ?>
+                <?= isset($_POST[$val[3]])? '(、' . $_POST[$val[3]] : false; ?>
+                <?= isset($_POST[$val[4]])? '、' .$_POST[$val[4]]. ')' : (isset($_POST[$val[3]]) ? ')' : false) ; ?>
+            </td>
+        </tr>
+    <?php break; ?>
+    <?php case('seeds'): ?>
     <tr>
         <td>
-            <?= $_POST[$val[0]] ?>
+            <?= $val[1]; ?>
         </td>
         <td>
-            <input type='text' name='<?= $val[0] ?>'>
+            <input type='radio' name='<?= $val[0] ?>'>見積書
+            <input type='radio' name='<?= $val[0] ?>'>請求書
         </td>
     </tr>
+<?php break; ?>
+<?php default: ?>
+    <tr>
+        <td>
+            <?= $val[1]; ?>
+        </td>
+        <td>
+            <input type='text' name='<?= $val[0] ?>' value='<?= isset($_POST[$val[0]])? $_POST[$val[0]]: false; ?>'>
+        </td>
+    </tr>
+<?php break; ?>
+<?php endswitch; ?> 
 <?php endforeach; ?>
-<tr>
-    <td>
-        <label for='auto_send'>一括送信対象フラグ</label>
-    </td>
-    <td>
-        <input type='radio' name='auto_send'>対象
-        <input type='radio' name='auto_send'>非対称
-    </td>
-</tr>
-<tr>
-    <td>
-        <label for='auto_send'>状態フラグ</label>
-    </td>
-    <td>
-        <input type='radio' name='auto_send'>取引中
-        <input type='radio' name='auto_send'>停止中
-        <input type='radio' name='auto_send'>削除
-    </td>
-</tr>
 </table>
 </form>
 <?php ?>
 <form method='POST' action=''>
-<h3>メールテンプレート</h3>
+<h3>メール文</h3>
 <table border='1'>
 <tr>
     <td>
@@ -78,7 +92,7 @@ $pdf_tableform_array = ["<textarea name='item_name'></textarea>",
 </table>
 </form>
 
-<h4>PDF作成時の初期テンプレート、品名設定</h4>
+<h4>PDF作成時</h4>
 <?php for($a=1; $a<=5; $a++): ?>
     <table border='1'>
     <tr>
@@ -115,5 +129,5 @@ $pdf_tableform_array = ["<textarea name='item_name'></textarea>",
     <br>
     </table>
 <?php endfor; ?>
-<button>更新する</button>　<button>リセット</button>
+<button>PDFを作成する</button>　<button>リセット</button>
 </div>
