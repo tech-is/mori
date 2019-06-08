@@ -52,8 +52,8 @@ function unforcus_mail_validation() {
 
 function submit_valdation() {
     $('form').submit(function () {
-        let name = 'input#nickname';
-        let error;
+        var name = 'input#nickname';
+        var error;
         $(name).next('span.error-info').remove();
         if ($(name).val() == "" || !$(name).val().match(/[^\s\t]/)) {
             error = true;
@@ -61,7 +61,7 @@ function submit_valdation() {
         } else {
             $(name).next('span.error-info').remove();
         }
-        let mail = 'input#mail';
+        var mail = 'input#mail';
         $(mail).next('span.error-info').remove();
         if (!$(mail).val().match(/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
             error = true;

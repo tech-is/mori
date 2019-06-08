@@ -7,6 +7,7 @@ $hoge = $database->select($sql);
 <body>
     <nav class="navbar navbar-dark bg-dark">
         <a href="#" class="navbar-brand">Tech-M</a>
+    </nav>
     <div class="container">
         <?php print_r($hoge); ?>
     </div>

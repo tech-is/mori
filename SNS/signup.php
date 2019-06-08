@@ -6,7 +6,7 @@
         <div class="Main-logo">
 			<h1>SignUp</h1>
 		</div>
-        <form method = "post" action = "#" >
+        <form method = "post" action ="">
             <div class="form-group">
                     <label for="nickname">ニックネーム</label>
                     <input type="text" class="form-control require" id="nickname" placeholder="ニックネームを10文字以内">
