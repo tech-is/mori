@@ -21,10 +21,10 @@ class Controller_keydam extends CI_Controller {
 	public function keydam_result()
 	{
 		$keydam = $this->input->get('keydam');
-        try{
-        echo eval('return '.$keydam.';');
+        try {
+        	echo eval('return '.$keydam.';');
         } catch ( Exception $ex ) {
-            echo "ヤバいですね！";
+            echo "エラーですね！";
         }
 	}
 }

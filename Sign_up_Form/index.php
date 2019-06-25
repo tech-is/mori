@@ -175,7 +175,6 @@ if(!empty($_POST['confirm'])){
     <input class="btn btn-primary col-sm-4 col-sm-offset-4" type="button" onClick="location.href='index.php'" value="ホームへ">
    　<?php else : ?>
      <!-- 入力ページ -->
-     <button onclick='$("#sex-div").toggle(200)'>a</button>
    　<form action="" method="post" enctype="multipart/form-data">
      <?php
       insert_parts($array);
@@ -192,7 +191,7 @@ if(!empty($_POST['confirm'])){
      <br>
      </div>
      <br>
-     <div id="sex-div" class ="form-group">
+     <div class ="form-group">
         <label for="sex">性別</label>
         <input type="radio" checked name="sex" value="male" id="male">男性
         <input type="radio" name="sex" value="female" id="female">女性<br>

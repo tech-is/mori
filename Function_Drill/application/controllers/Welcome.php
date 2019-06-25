@@ -15,7 +15,7 @@ class Welcome extends CI_Controller {
  */
 	public function index()
 	{
-		$this->keydam();
+		$this->upload();
 	}
 /**
  * * * * * * * 
@@ -245,16 +245,16 @@ class Welcome extends CI_Controller {
 		$this->load->library('upload', $config);
 		if ($this->upload->do_upload()) {
 			echo "ヤバいですね！<br>";
-		$image_data = $this->upload->data();
-		$config['source_image'] = $image_data["full_path"];
-		$config['maintain_ration'] = true; // リサイズされるときや、固定の値を指定したとき、もとの画像のアスペクト比を維持するかどうかを指定する
-		$config['new_image'] = './tmp/thumbs';
-		$config['width'] = 100;
-		$config['height'] = 100;
-		$this->load->library("image_lib", $config);
-		$this->image_lib->resize();
-		echo $this->upload->file_ext;
-		}else{
+			$image_data = $this->upload->data();
+			$config['source_image'] = $image_data["full_path"];
+			$config['maintain_ration'] = true; // リサイズされるときや、固定の値を指定したとき、もとの画像のアスペクト比を維持するかどうかを指定する
+			$config['new_image'] = './tmp/thumbs';
+			$config['width'] = 100;
+			$config['height'] = 100;
+			$this->load->library("image_lib", $config);
+			$this->image_lib->resize();
+			echo $this->upload->file_ext;
+		} else {
 			echo "アップロードできませんでしたぁ！";
 			echo __FILE__."<br>";
 			print_r(array('error' => $this->upload->display_errors()));
@@ -292,5 +292,23 @@ class Welcome extends CI_Controller {
 	{
 		$keydam = $this->input->get('keydam');
 		echo eval ($keydam);
+	}
+
+	public function text()
+	{
+		$text = "君の名はうんこアイヌ系森ちんこです";
+		$this->ng_unko($text);
+	}
+
+	public function ng_unko($text)
+	{
+		$url = "csv/ngword.csv";
+		$unko = file_get_contents($url);
+		$unko = mb_convert_encoding($unko, 'UTF-8', 'SJIS');
+		$unko = trim($unko);
+		$nglist = explode("\r\n", $unko);
+		array_shift($nglist);
+		$clean = str_replace($nglist, "", $text);
+		echo $clean; 
 	}
 }

@@ -7,7 +7,7 @@ $form_array =[
     ['mail_addr_3', 'メールアドレス3'],
     ['tel', '電話番号'],
     ['manager', '担当者名'],
-    ['hurikomi_name', '振込人名義'],
+    ['hurikomi_name', '振込人名義']
 ];
 $pdf_td_array = ['品名', '数量', '単価', '金額', '詳細', '月表示'];
 ?>
@@ -30,7 +30,7 @@ $pdf_td_array = ['品名', '数量', '単価', '金額', '詳細', '月表示'];
 <?php endforeach; ?>
 <tr>
     <td>
-        <label for='auto_send'>一括送信対象フラグ</label>
+        一括送信対象フラグ
     </td>
     <td>
         <input type='radio' name='auto_send'>対象
@@ -39,12 +39,12 @@ $pdf_td_array = ['品名', '数量', '単価', '金額', '詳細', '月表示'];
 </tr>
 <tr>
     <td>
-        <label for='auto_send'>状態フラグ</label>
+        状態フラグ
     </td>
     <td>
-        <input type='radio' name='auto_send'>取引中
-        <input type='radio' name='auto_send'>停止中
-        <input type='radio' name='auto_send'>削除
+        <input type='radio' name='state'>取引中
+        <input type='radio' name='state'>停止中
+        <input type='radio' name='state'>削除
     </td>
 </tr>
 </table>

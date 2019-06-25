@@ -205,5 +205,10 @@ class Main extends CI_Controller
 			echo "不正なキーが使われています";
 		}
 	}
+
+	function unko_ng()
+	{
+		file_get_contents("../../");
+	}
 }
 
