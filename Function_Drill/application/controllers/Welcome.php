@@ -15,7 +15,7 @@ class Welcome extends CI_Controller {
  */
 	public function index()
 	{
-		$this->upload();
+		$this->date_answer();
 	}
 /**
  * * * * * * * 
@@ -294,6 +294,10 @@ class Welcome extends CI_Controller {
 		echo eval ($keydam);
 	}
 
+/**
+ * NGフィルター
+ */
+
 	public function text()
 	{
 		$text = "君の名はうんこアイヌ系森ちんこです";
@@ -310,5 +314,14 @@ class Welcome extends CI_Controller {
 		array_shift($nglist);
 		$clean = str_replace($nglist, "", $text);
 		echo $clean; 
+	}
+
+/**
+ * 日付 
+ */
+
+	public function date_answer()
+	{
+		$this->load->view("date_answer");
 	}
 }
