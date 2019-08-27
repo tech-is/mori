@@ -58,7 +58,7 @@
     foreach ($lines as $line) {
     // カンマで分割
     $cols = explode(",", $line);
-    $holidays[] = [trim($cols[0]), ":".trim($cols[1])];
+    $holidays[] = [trim($cols[0]), ":<a href='https://ja.wikipedia.org/wiki/".trim($cols[1])."'>".trim($cols[1])."</a>"];
     }
 
     $prevmonth = date('j', mktime(0, 0, 0, date('m', $timestamp), 0, date('Y', $timestamp)));

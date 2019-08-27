@@ -3,12 +3,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Main extends CI_Controller
 {
-	
+	/**
+	 * index
+	 * @param none
+	 * @return login()
+	 */
     public function index()
     {
 		$this->login();
     }
     
+	/**
+	 * Undocumented function
+	 * @param $_SESSION["is_logged_in"]
+	 * @return include login.php
+	 */
     public function login()
     {
 		if($this->session->userdata("is_logged_in")){
@@ -91,14 +100,13 @@ class Main extends CI_Controller
 				 "rules" => 'trim|required',
 				 "errors" => ["required" => "名前は入力必須です。"]
 				],
-				   
 				["field" => "kana",
 				 "label" => "カナ",
 				 "rules" => 'trim|required|regex_match[/^[ァ-ヾ]+$/u]',
 				 "errors" => [
 					"required" => "カナは入力必須です。",
 					"regex_match" => "全角カタカナで入力してください。"
-				]],
+				],
 
 				["field" => "tel",
 				 "label" => "電話番号",
@@ -115,7 +123,7 @@ class Main extends CI_Controller
 					"required" => "メールアドレスは入力必須です。",
 					"valid_email" => "メールアドレスが不正です。" 
 				]]
-				];
+		];
 		$this->form_validation->set_rules($config);
 		if ($this->form_validation->run()) {
 			//ランダムキーを生成する

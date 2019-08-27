@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <fluits-list-title></fluits-list-title>
+        <fluits-list-description></fluits-list-description>
+        <!-- <fluits-list-table></fluits-list-table> -->
+    </div>
+
+    <script>
+        Vue.component('fluits-list-title', {
+            template: '<h1>フルーツ一覧</h1>'
+        })
+
+        Vue.component('fluits-list-description', {
+            template: '<p>季節の代表的なフルーツの一覧です</p>'
+        })
+
+        // Vue: component('fruits-list-table', {
+        //     template: 
+        // })
+        new Vue({ el: "#app" })
+    </script>
+</body>
+
+</html>
