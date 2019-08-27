@@ -18,7 +18,7 @@
         .error {
             color: red;
         }
-	    .container-fluid {
+        .container-fluid {
             /* padding: 50px; */
             background-color: #efefef;
         }
@@ -30,10 +30,10 @@
         }
 </style>
 <!-- Bootstrap4.3.1 -->
-<link rel="stylesheet" 
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
-      crossorigin="anonymous">
+<link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    crossorigin="anonymous">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
 <body>
@@ -43,7 +43,7 @@
             <div style="display: inline-block; text-align: center">
                 <h2>
                     <i class="fa fa-users" aria-hidden="true"></i>
-                    書き込みログ
+                    <span>書き込みログ</span>
                 </h2>
             </div>
         <div class="row">
@@ -56,19 +56,20 @@
                 <form action="" method="post" onSubmit="return Check(this)">
                     <p>
                         <label for="name" class="control-label">名前</label>
-                        <input type="text" class="form-control" name="name" maxlength="30" value="<?php if(isset($_POST['name'])){ echo $_POST['name'];} ?>">
-                    </p> 
+                        <input type="text" class="form-control" name="name" maxlength="30"
+                            value="<?= isset($_POST['name'])? $_POST['name']: false; ?>">
+                    </p>
                     <p>
                         <label for="text" class="control-label">本文</label>
-                        <textarea name="text" class="form-control" maxlength="100"><?php isset($_POST['text'])? print($_POST['text']): false; ?></textarea>
+                        <textarea name="text" class="form-control" maxlength="100"><?= isset($_POST['text'])? $_POST['text']: false; ?></textarea>
                     </p>
                     <p><input type="submit" class="btn btn-primary" name="submit" value="書き込み"></p>
                 </form>
             </div>
         </div>
-    </div> 
+    </div>
     <!-- <div class="container"> -->
-    <script type="text/javascript"> 
+    <script type="text/javascript">
         function Check(form) {
             var fd1 = form.name.value.trim();
             var fd2 = form.text.value.trim();

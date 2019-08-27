@@ -7,31 +7,32 @@ function login_API_session(){
     $sql = 'SELECT name, password FROM member WHERE mail = :mail';
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(":mail", $login_mail, PDO::PARAM_STR);
-    // $stmt->bindValue(":password", $login_pass, PDO::PARAM_STR);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    if($row==false){
+    if ($row == false) {
         return false;
-    }elseif(password_verify($login_pass, $row['password'])){
+    } elseif (password_verify($login_pass, $row['password'])){
         $_SESSION["NAME"]=$row['name'];
         return true;
-    }else{
+    } else {
         return false;
     }
 }
 
-function Logined_session(){
-    if(isset($_SESSION["NAME"])){
+function Logined_session()
+{
+    if (isset($_SESSION["NAME"])) {
         header("location: ./Main.php");
-    exit;
+        exit;
     }
 }
 
-function logout_session(){
-    if(isset($_GET["logout"])){
+function logout_session()
+{
+    if (isset($_GET["logout"])) {
         session_destroy();
         header("location: ./index.php");
-    exit;
+        exit;
     }
 }
 

@@ -20,7 +20,7 @@ $array = [["name", "名前"], ["body", "本文"], ["date", "書込日時"]];
             <?php endforeach; ?>
         </tr>
         <tr>
-            
+
         </tr>
     </table>
 </div>
