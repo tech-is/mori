@@ -1,8 +1,5 @@
 <?php
     require_once("./core/core.php");
-    // $browser = new browser();
-    // $browser_info = $browser->get_info();
-    // print_r($browser_info);
     if(isset($_POST['submit'])){
         Insert_BBS();
         header ('Location: index.php');

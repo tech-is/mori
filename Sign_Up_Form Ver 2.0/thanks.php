@@ -9,13 +9,12 @@ require_once('./core/core.php');
 </head>
 <body>
     <div class="container">
-        <h1><p>仮登録が完了しました</p></h1>
-        <br>
-            <p>会員仮登録ありがとうございました。</p>
-            <p>本登録詳細はメールを送付しましたので、</p>
-            <p>メール先のリンクにて本登録完了をお願いいたします。</p>
+        <h1>仮登録が完了しました</h1>
+        <p>会員仮登録ありがとうございました。</p>
+        <p>本登録詳細はメールを送付しましたので、</p>
+        <p>メール先のリンクにて本登録完了をお願いいたします。</p>
         <form method="get" action="index.php">
-            <input type="submit" name="home" value="ホームへ">
+            <p><input type="submit" name="home" value="ホームへ"></p>
         </form>
     </div>
 </body>
