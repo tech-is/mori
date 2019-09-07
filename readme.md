@@ -1,25 +1,84 @@
-#動作環境 
+# Mori workplace
 
-PHP7以上が動作する環境を前提として書かれています
+## 概要 | Overview
 
-# プログラム概要
-## calender
-カレンダー大規模改修済み
-## BBS_Form
-一言掲示板
-## CodeIgniter
-CodeIgniter3以上を使った一言掲示板
-## LoginForm
-ログインが完了したらDBからGETしたデータをCSV形式でダウンロード
-## Sign_up_Form
-会員登録画面
-## Sign_Up_Form Ver 2.0
-会員登録画面（機能追加予定）
-## Function_Drill
-関数ドリル課題提出
-## Login_for_CodeLgniter
-CodeIgniter3使用
-ログイン後に掲示板も実装予定
+tech.isで作成した課題のコードをまとめています
+<hr>
 
+## Directory tree | フォルダツリー
 
+```
+.
+| /* HTML5 PHP MariaDB
+| * 一言掲示板
+| */
+├─BBS_Form
+|
+| /* HTML5 PHP
+| * PHPカレンダー
+| */
+├─calender
+|
+| /* HTML5 PHP
+| * PHPカレンダー
+| */
+├─Codeigniter
+|
+| /* HTML5 PHP MariaDB
+| * Classを用いたDBへの接続オブジェクト例
+| */
+├─dbclass sample
+|
+| /* HTML5 PHP
+| * 関数ドリル
+├─Function_Drill
+|
+| /* HTML5 PHP
+| * ログインページ
+| */
+├─LoginForm
+|
+| /*PHP
+| * Codeigniterをつかったログインページ
+| */
+├─Login_for_CodeIgniter
+|
+| /* HTML5 PHP
+| * ログインページ
+| */
+├─PDFsys
+|
+| /* HTML5 PHP
+| * スクレイピング
+| */
+├─scraping /*PHP
+|
+| /* HTML5 PHP
+| * 会員登録フォーム
+| */
+├─Sign_up_Form /*PHP
+|
+| /* HTML5 PHP
+| * 会員登録フォームver2.0
+| */
+├─Sign_Up_Form Ver 2.0 /*PHP
+|
+| /* HTML5 PHP
+| * SNSページ
+| */
+├─SNS /*PHP
+|
+| /* HTML5 PHP
+| * JavaScript vue.js
+| */
+└─vue.js
+```
 
+## 使用方法 | Usage
+
+各ディレクトリにRead.meを配置していますので導入したいプロジェクトのフォルダに移動してください
+<hr>
+
+## 導入方法 | Install
+
+apacheのDocumentRootにgit cloneするかzipを展開してください

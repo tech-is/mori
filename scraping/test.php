@@ -1,10 +1,10 @@
 <?php
-function ehime()
-{
-    require_once("phpQuery-onefile.php");
-    $html = file_get_contents("https://www.jma.go.jp/jp/yoho/342.html");
-    return phpQuery::newDocument($html)->find("#forecasttablefont");
-}
+    function ehime()
+    {
+        require_once("phpQuery-onefile.php");
+        $html = file_get_contents("https://www.jma.go.jp/jp/yoho/342.html");
+        return phpQuery::newDocument($html)->find("#forecasttablefont");
+    }
 ?>
 <!DOCTYPE html>
 <head>
@@ -78,8 +78,6 @@ function ehime()
     </style>
 </head>
 <body>
-<?php
-    echo ehime();
-?>
+<?= ehime(); ?>
 </body>
 </html>
