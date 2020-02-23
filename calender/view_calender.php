@@ -22,14 +22,14 @@ function load_csv() {
     $array = [];
     if (($handle = (fopen(CSV_PATH, "r"))) !== FALSE) {
         while (($data = (fgetcsv($handle, 1000, ","))) !== FALSE) {
-            if(is_array($data)) {
+            if (is_array($data)) {
                 $date = str_replace('/', '-', $data[0]);
                 $array[$date] = $data[1];
             }
         }
         fclose($handle);
     } else {
-        throw new Exception('ゼロによる除算。');
+        throw new Exception('CSVファイルの取得に失敗しました');
     }
     array_shift($array);
     return $array;
@@ -45,19 +45,19 @@ function generate_table($timestamp, $ym, $holidays)
     $day_of_the_week = date('w', mktime(0, 0, 0, date('m', $timestamp), 1, date('Y', $timestamp)));
     $prevmonth = date('j', mktime(0, 0, 0, date('m', $timestamp), 0, date('Y', $timestamp)));
 
-    for($a = $prevmonth - $day_of_the_week + 1 ; $a <= $prevmonth; $a++){
+    for ($a = $prevmonth - $day_of_the_week + 1 ; $a <= $prevmonth; $a++){
         $week .= '<td class="not_current">' .$a. '</td>';
     }
 
     for ($day = 1; $day <= $day_count; $day++, $day_of_the_week++) {
         $date = $ym . '-' .$day;
         if (array_key_exists($date, $holidays)){
-            if($holidays[$date] == "休日") {
+            if ($holidays[$date] == "休日") {
                 $datestr = "<span style='color:red'>{$day} {$holidays[$date]}</span>";
             } else {
                 $datestr = "<a href='https://ja.wikipedia.org/wiki/{$holidays[$date]}' target='_blank'><span style='color:red'>{$day} {$holidays[$date]}</span></a>";
             }
-        }else{
+        } else {
             $datestr = $day;
         }
 
@@ -71,7 +71,7 @@ function generate_table($timestamp, $ym, $holidays)
         if ($day_of_the_week % 7 == 6 || $day == $day_count) {
             if ($day == $day_count) {
                 // 月の最終日の場合、空セルを追加
-                for($i=1; $i <= 6 - ($day_of_the_week % 7); $i++){
+                for ($i=1; $i <= 6 - ($day_of_the_week % 7); $i++) {
                     $week .= '<td class="not_current">'. $i .'</td>';
                 }
             }
@@ -104,7 +104,7 @@ try {
     $next = date('Y-n', mktime(0, 0, 0, date('m', $timestamp)+1, 1, date('Y', $timestamp)));
 
     //内閣府から祝日を取得する
-    if(!is_file(CURRENT_DIR.'/csv/syukujitsu.csv')) {
+    if (!is_file(CURRENT_DIR.'/csv/syukujitsu.csv')) {
         download_file('https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv');
     }
     $holidays = load_csv();
