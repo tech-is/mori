@@ -105,7 +105,7 @@ try {
 
     //内閣府から祝日を取得する
     if (!is_file(CURRENT_DIR.'/csv/syukujitsu.csv')) {
-        download_file('https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv');
+        download_csv('https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv');
     }
     $holidays = load_csv();
     $weeks = generate_table($timestamp, $ym, $holidays);
