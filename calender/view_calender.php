@@ -1,114 +1,170 @@
 <?php
-/**
- * @return カレンダーをhtmlテーブルで作成
- *         
- */
-    // タイムゾーンを設定
-    date_default_timezone_set('Asia/Tokyo');
+define('CURRENT_DIR', dirname(__FILE__));
+define('CSV_PATH', CURRENT_DIR.'/csv/syukujitsu.csv');
 
-    /**
-     * 前月・次月リンクが押された場合は、GETパラメーターから年月を取得
-     */
-    isset($_GET['ym']) ? $ym = $_GET['ym'] : $ym = date('Y-m');
+ // タイムゾーンを設定
+date_default_timezone_set('Asia/Tokyo');
 
-    /**
-     * 現在の日時を取得
-     */
-    $today = date('Y-m-d');
+function download_csv($url) {
+    $tmp = file_get_contents($url);
+    if (!$tmp){ 
+        throw new Exception("csvダウンロードに失敗しました");
+    }
+    $tmp = mb_convert_encoding($tmp, 'UTF-8', 'SJIS');
+    $fp = fopen(CSV_PATH, 'w');
+    fwrite($fp, $tmp);
+    fclose($fp);
+    return;
+}
 
-    /**
-     * タイムスタンプを作成し、フォーマットをチェック
-     */
-    $timestamp = strtotime($ym . '-01');
+function load_csv() {
+    $row = 1;
+    $array = [];
+    if (($handle = (fopen(CSV_PATH, "r"))) !== FALSE) {
+        while (($data = (fgetcsv($handle, 1000, ","))) !== FALSE) {
+            if(is_array($data)) {
+                $date = str_replace('/', '-', $data[0]);
+                $array[$date] = $data[1];
+            }
+        }
+        fclose($handle);
+    } else {
+        throw new Exception('ゼロによる除算。');
+    }
+    array_shift($array);
+    return $array;
+}
+
+function generate_table($timestamp, $ym, $holidays)
+{
+    $today = date('Y-n-D');
+    $week = '';
+    $weeks = [];
+    // 該当月の日数を取得
+    $day_count = date('t', $timestamp);
+    $day_of_the_week = date('w', mktime(0, 0, 0, date('m', $timestamp), 1, date('Y', $timestamp)));
+    $prevmonth = date('j', mktime(0, 0, 0, date('m', $timestamp), 0, date('Y', $timestamp)));
+
+    for($a = $prevmonth - $day_of_the_week + 1 ; $a <= $prevmonth; $a++){
+        $week .= '<td class="not_current">' .$a. '</td>';
+    }
+
+    for ($day = 1; $day <= $day_count; $day++, $day_of_the_week++) {
+        $date = $ym . '-' .$day;
+        if (array_key_exists($date, $holidays)){
+            if($holidays[$date] == "休日") {
+                $datestr = "<span style='color:red'>{$day} {$holidays[$date]}</span>";
+            } else {
+                $datestr = "<a href='https://ja.wikipedia.org/wiki/{$holidays[$date]}' target='_blank'><span style='color:red'>{$day} {$holidays[$date]}</span></a>";
+            }
+        }else{
+            $datestr = $day;
+        }
+
+        if ($date == $today) {
+            // 今日の日付の場合は、class="today"をつける
+            $week .= "<td class='today'>{$datestr}</td>";
+        } else {
+            $week .= "<td>{$datestr}</td>";
+        }
+        //週終わり、または、月終わりの場合
+        if ($day_of_the_week % 7 == 6 || $day == $day_count) {
+            if ($day == $day_count) {
+                // 月の最終日の場合、空セルを追加
+                for($i=1; $i <= 6 - ($day_of_the_week % 7); $i++){
+                    $week .= '<td class="not_current">'. $i .'</td>';
+                }
+            }
+            // weeks配列にtrを追加する
+            $weeks[] = '<tr>' . $week . '</tr>';
+            // weekをリセット
+            $week = '';
+        }
+    }
+    return $weeks;
+}
+
+try {
+     // 前月・次月リンクが押された場合は、GETパラメーターから年月を取得
+    isset($_GET['ym']) ? $ym = $_GET['ym'] : $ym = date('Y-n');
+
+    // タイムスタンプを作成し、フォーマットをチェック
+    $timestamp = strtotime($ym. '-01');
+
     if ($timestamp === false) {
-        $ym = date('Y-m');
-        $timestamp = strtotime($ym . '-01');
+        $ym = date('Y-n');
+        $timestamp = strtotime($ym. '-01');
     }
 
     // カレンダーのタイトルを作成　例）2017年7月
     $html_title = date('Y年n月', $timestamp);
 
-    /**
-     * 前月・次月の年月を取得
-     */
-    $prev = date('Y-m', mktime(0, 0, 0, date('m', $timestamp)-1, 1, date('Y', $timestamp)));
-    $next = date('Y-m', mktime(0, 0, 0, date('m', $timestamp)+1, 1, date('Y', $timestamp)));
+    // 前月・次月の年月を取得
+    $prev = date('Y-n', mktime(0, 0, 0, date('m', $timestamp)-1, 1, date('Y', $timestamp)));
+    $next = date('Y-n', mktime(0, 0, 0, date('m', $timestamp)+1, 1, date('Y', $timestamp)));
 
-    // 該当月の日数を取得
-    $day_count = date('t', $timestamp);
-
-    $day_of_the_week = date('w', mktime(0, 0, 0, date('m', $timestamp), 1, date('Y', $timestamp)));
-    
-
-    $weeks = [];
-    $week = '';
     //内閣府から祝日を取得する
-    $url = 'http://www8.cao.go.jp/chosei/shukujitsu/syukujitsu_kyujitsu.csv';
-    $data = file_get_contents($url);
-    if (!$data) {
-        throw new Exception("祝日データ取得に失敗しました。");
+    if(!is_file(CURRENT_DIR.'/csv/syukujitsu.csv')) {
+        download_file('https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv');
     }
-    // CSV が SJIS なので文字コードを変換しておく
-    $data = mb_convert_encoding($data, 'UTF-8', 'SJIS');
-    // 行ごとに分割
-    $lines = explode("\n", $data);
-    $dummy = array_shift($lines);
-    $dummy = array_pop($lines);
-    $holidays = [];
-    foreach ($lines as $line) {
-    // カンマで分割
-    $cols = explode(",", $line);
-    $holidays[] = [trim($cols[0]), ":<a href='https://ja.wikipedia.org/wiki/".trim($cols[1])."'>".trim($cols[1])."</a>"];
-    }
-
-    $prevmonth = date('j', mktime(0, 0, 0, date('m', $timestamp), 0, date('Y', $timestamp)));
-    for($a = $prevmonth - $day_of_the_week + 1 ; $a <= $prevmonth; $a++){
-        $week .= '<td class="not_current">' .$a. '</td>';
-    }
-    for ($day = 1; $day <= $day_count; $day++, $day_of_the_week++) {
-        $day2 = sprintf('%02d', $day);
-        $date = $ym . '-' . $day2;
-        $result = array_search($date,array_column($holidays,'0'));
-        if ($result === false){
-            $datestr= $day;
-        }else{
-            $datestr='<font color=red>' . $day.$holidays[$result][1]. '</font>';
-        }
-
-        if ($today == $date) {
-            // 今日の日付の場合は、class="today"をつける
-            $week .= '<td class="today">' . $datestr;
-        } else {
-            $week .= '<td>' . $datestr;
-        }
-        $week .= '</td>';
-        // 週終わり、または、月終わりの場合
-        if ($day_of_the_week % 7 == 6 || $day == $day_count) {
-            if ($day == $day_count) {
-                // 月の最終日の場合、空セルを追加
-                for($i=1; $i <= 6 - ($day_of_the_week % 7); $i++){
-                $week .= '<td class="not_current">'. $i .'</td>';
-                }
-            }
-            // week配列にtrを追加する
-            $weeks[] = '<tr>' . $week . '</tr>';
-            // weekをリセット
-            $week = '';
-        }
+    $holidays = load_csv();
+    $weeks = generate_table($timestamp, $ym, $holidays);
+    
+} catch (Exception $e) {
+    echo '捕捉した例外: ',  $e->getMessage(), "\n";
+    exit;
 }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="./css/calender.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Calender</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <style>
+        th {
+            width: 10rem;
+            text-align: center;
+        }
+        td {
+            width: 10rem;
+            height: 8rem;
+        }
+        td.today {
+            background: orange;
+        }
+        th:nth-of-type(1), td:nth-of-type(1) {
+            color: red;
+        }
+        th:nth-of-type(7), td:nth-of-type(7) {
+            color: blue;
+        }
+        td.not_current {
+            color: #c6d3d3;
+        }
+        .title-wraper {
+            font-size: 2rem;
+        }
+    </style>
 </head>
+
 <body>
-    <div class="container">
-    <h3><a href="?ym=<?= $prev; ?>">&lt; prev</a> <?= $html_title; ?> <a href="?ym=<?= $next; ?>">next &gt;</a></h3>
-    <p style="text-align: right;"><a href="index_1.php">Current</a></p>
+    <div class="container-fluid">
+        <div class="my-4 d-flex justify-content-between">
+            <a href="?ym=<?= $prev; ?>">
+                &lt;&lt; prev
+            </a>
+            <span class="title-wraper"><?= $html_title; ?></span>
+            <a href="?ym=<?= $next; ?>">
+                next &gt;&gt;
+            </a>
+        </div>
+        <div class="my-4" style="text-align: right">
+            <a href="view_calender.php">Current</a>
+        </div>
         <table class="table table-bordered">
             <tr>
                 <th>日</th>
