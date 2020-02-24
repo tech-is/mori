@@ -1,41 +1,49 @@
 <?php
 define('CURRENT_DIR', dirname(__FILE__));
-define('CSV_PATH', CURRENT_DIR.'/csv/syukujitsu.csv');
+define('CSV_DIR', CURRENT_DIR.'/csv');
+define('CSV_FILEPATH', CSV_DIR.'/holidays.csv');
 
  // タイムゾーンを設定
 date_default_timezone_set('Asia/Tokyo');
 
-function download_csv($url) {
-    $tmp = file_get_contents($url);
-    if (!$tmp){ 
-        throw new Exception("csvダウンロードに失敗しました");
+function create_csvfolder()
+{
+    if(!mkdir(CSV_DIR, 0775)) {
+        throw new Exception("csvディレクトリの作成に失敗しました");
     }
+}
+
+function download_csv($url)
+{
+    $tmp = file_get_contents($url);
     $tmp = mb_convert_encoding($tmp, 'UTF-8', 'SJIS');
-    $fp = fopen(CSV_PATH, 'w');
+    $fp = fopen(CSV_FILEPATH, 'w');
     fwrite($fp, $tmp);
     fclose($fp);
-    return;
 }
 
-function load_csv() {
-    $row = 1;
-    $array = [];
-    if (($handle = (fopen(CSV_PATH, "r"))) !== FALSE) {
-        while (($data = (fgetcsv($handle, 1000, ","))) !== FALSE) {
-            if (is_array($data)) {
-                $date = str_replace('/', '-', $data[0]);
-                $array[$date] = $data[1];
-            }
+function load_csv() 
+{
+    $file = new SplFileObject(CSV_FILEPATH);
+    $file->setFlags(
+        SplFileObject::READ_CSV | // CSV 列として行を読み込みます。
+        SplFileObject::READ_AHEAD | // 先読み/巻き戻しで読み出します。
+        SplFileObject::SKIP_EMPTY // ファイルの空行を読み飛ばします。(READ_AHEAD フラグ有効時)
+    );
+    foreach ($file as $row) {
+        if ($file->key() > 0 && ! $file->eof()) {
+            $date = str_replace('/', '-', $row[0]);
+            $records[$date] = $row[1];
         }
-        fclose($handle);
-    } else {
-        throw new Exception('CSVファイルの取得に失敗しました');
     }
-    array_shift($array);
-    return $array;
+    if (!is_array($records) || empty($records)) {
+        throw new Exception('CSVファイルの取得に失敗しました');
+    } 
+    $last = array_key_first($records);
+    return $records;
 }
 
-function generate_table($timestamp, $ym, $holidays)
+function generate_calender($timestamp, $ym, $holidays)
 {
     $today = date('Y-n-D');
     $week = '';
@@ -85,31 +93,29 @@ function generate_table($timestamp, $ym, $holidays)
 }
 
 try {
-     // 前月・次月リンクが押された場合は、GETパラメーターから年月を取得
-    isset($_GET['ym']) ? $ym = $_GET['ym'] : $ym = date('Y-n');
+    if(!is_dir(CSV_DIR)) {
+        create_csvfolder();
+    }
+    // 前月・次月リンクが押された場合は、GETパラメーターから年月を取得
+    $ym = !empty($_GET['ym']) ? $_GET['ym'] :date('Y-n');
 
-    // タイムスタンプを作成し、フォーマットをチェック
+   // タイムスタンプを作成し、フォーマットをチェック
     $timestamp = strtotime($ym. '-01');
 
-    if ($timestamp === false) {
-        $ym = date('Y-n');
-        $timestamp = strtotime($ym. '-01');
-    }
+   // カレンダーのタイトルを作成　例）2017年7月
+    $title = date('Y年n月', $timestamp);
 
-    // カレンダーのタイトルを作成　例）2017年7月
-    $html_title = date('Y年n月', $timestamp);
+   // 前月・次月の年月を取得
+    $prev = date('Y-n', mktime(0, 0, 0, date('n', $timestamp)-1, 1, date('Y', $timestamp)));
+    $next = date('Y-n', mktime(0, 0, 0, date('n', $timestamp)+1, 1, date('Y', $timestamp)));
 
-    // 前月・次月の年月を取得
-    $prev = date('Y-n', mktime(0, 0, 0, date('m', $timestamp)-1, 1, date('Y', $timestamp)));
-    $next = date('Y-n', mktime(0, 0, 0, date('m', $timestamp)+1, 1, date('Y', $timestamp)));
-
-    //内閣府から祝日を取得する
-    if (!is_file(CURRENT_DIR.'/csv/syukujitsu.csv')) {
+   //内閣府から祝日を取得する
+    if (!is_file(CSV_FILEPATH)) {
         download_csv('https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv');
     }
     $holidays = load_csv();
-    $weeks = generate_table($timestamp, $ym, $holidays);
-    
+    $weeks = generate_calender($timestamp, $ym, $holidays);
+
 } catch (Exception $e) {
     echo '捕捉した例外: ',  $e->getMessage(), "\n";
     exit;
@@ -157,7 +163,7 @@ try {
             <a href="?ym=<?= $prev; ?>">
                 &lt;&lt; prev
             </a>
-            <span class="title-wraper"><?= $html_title; ?></span>
+            <span class="title-wraper"><?= $title; ?></span>
             <a href="?ym=<?= $next; ?>">
                 next &gt;&gt;
             </a>
@@ -166,20 +172,24 @@ try {
             <a href="view_calender.php">Current</a>
         </div>
         <table class="table table-bordered">
-            <tr>
-                <th>日</th>
-                <th>月</th>
-                <th>火</th>
-                <th>水</th>
-                <th>木</th>
-                <th>金</th>
-                <th>土</th>
-            </tr>
+            <thead>
+                <tr>
+                    <th>日</th>
+                    <th>月</th>
+                    <th>火</th>
+                    <th>水</th>
+                    <th>木</th>
+                    <th>金</th>
+                    <th>土</th>
+                </tr>
+            </thead>
+            <tbody>
             <?php
                 foreach ($weeks as $week) {
                     echo $week;
                 }
             ?>
+            </tbody>
         </table>
     </div>
 </body>
